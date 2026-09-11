@@ -24,6 +24,7 @@ const LoginPage = () => {
           alt="PH HealthCare Login Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
           fill
+          loading='eager'
         />
       </div>
     </div>
