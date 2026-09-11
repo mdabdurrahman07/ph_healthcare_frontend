@@ -7,29 +7,40 @@ import { Input } from "../ui/input";
 import { Eye, EyeClosed } from "lucide-react";
 import { Button } from "../ui/button";
 import { useLogin } from "@/hooks/auth";
+import { toast } from "../ui/toast";
+import { Spinner } from "../ui/spinner";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const {mutate: login, isPending: loginPending} = useLogin()
+  const { mutate: login, isPending: loginPending } = useLogin();
   const form = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
-    onSubmit: ({value}) => {
-
+    onSubmit: ({ value }) => {
       const loginData = {
         email: value.email,
-        password: value.password
-      }
-      login(loginData,{
+        password: value.password,
+      };
+      login(loginData, {
         onSuccess: (res) => {
-          console.log(res)
+          toast.add({
+            title: "user login successful",
+            description: "Welcome back",
+            type: "success",
+          });
+          console.log(res);
         },
         onError: (err) => {
-          console.log(err)
-        }
-      })
+          toast.add({
+            title: "authorization failure",
+            description: err.message || "something went wrong",
+            type: "error",
+          });
+          console.log(err);
+        },
+      });
     },
   });
   return (
@@ -110,7 +121,16 @@ const LoginForm = () => {
             }}
           </form.Field>
 
-          <Button type="submit">Submit</Button>
+          <Button disabled={loginPending} type="submit">
+            {loginPending ? (
+              <>
+                <Spinner />
+                submitting
+              </>
+            ) : (
+              "submit"
+            )}
+          </Button>
         </FieldGroup>
       </form>
     </div>
