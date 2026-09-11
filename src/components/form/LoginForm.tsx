@@ -6,16 +6,30 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Eye, EyeClosed } from "lucide-react";
 import { Button } from "../ui/button";
+import { useLogin } from "@/hooks/auth";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const {mutate: login, isPending: loginPending} = useLogin()
   const form = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
-    onSubmit: (data) => {
-      console.log(data);
+    onSubmit: ({value}) => {
+
+      const loginData = {
+        email: value.email,
+        password: value.password
+      }
+      login(loginData,{
+        onSuccess: (res) => {
+          console.log(res)
+        },
+        onError: (err) => {
+          console.log(err)
+        }
+      })
     },
   });
   return (
