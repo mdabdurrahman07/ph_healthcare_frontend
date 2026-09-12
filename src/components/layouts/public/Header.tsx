@@ -1,5 +1,9 @@
+"use client";
 import Logo from "@/assests/svg/logo";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
+import { useGetMe, useLogout } from "@/hooks/auth";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import React from "react";
 
@@ -11,6 +15,28 @@ const routes = [
 ];
 
 const Header = () => {
+  const { data, isLoading } = useGetMe();
+  const { mutate: logout } = useLogout();
+  const queryClient = useQueryClient();
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        toast.add({
+          title: "logout successfully",
+          description: "something went wrong",
+          type: "success",
+        });
+        queryClient.removeQueries({ queryKey: ["user"] });
+      },
+      onError: () => {
+        toast.add({
+          title: "logout failed",
+          description: "logged out failed",
+          type: "error",
+        });
+      },
+    });
+  };
   return (
     <header className="w-full h-16 border border-b">
       <div className="flex justify-between items-center h-full max-w-7xl mx-auto">
@@ -26,13 +52,20 @@ const Header = () => {
           ))}
         </nav>
         <div>
-          <Button
-            variant="outline"
-            render={<Link href="/login">Login</Link>}
-            nativeButton={false}
-          >
-            Login
-          </Button>
+          {!isLoading && !data && (
+            <Button
+              variant="outline"
+              render={<Link href="/login">Login</Link>}
+              nativeButton={false}
+            >
+              Login
+            </Button>
+          )}
+          {!isLoading && data && (
+            <Button onClick={handleLogout} variant="destructive">
+              Logout
+            </Button>
+          )}
         </div>
       </div>
     </header>

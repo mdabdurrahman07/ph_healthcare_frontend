@@ -1,5 +1,6 @@
 import Logo from "@/assests/svg/logo";
-import LoginForm from "@/components/form/LoginForm";
+import { LoginForm } from "@/components/form/LoginForm";
+
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

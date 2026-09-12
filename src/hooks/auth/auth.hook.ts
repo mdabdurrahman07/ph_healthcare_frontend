@@ -1,5 +1,5 @@
 import { getMe, userLogin, userLogout } from "@/api/auth/auth.api";
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useLogin = () => {
   return useMutation({
@@ -14,6 +14,7 @@ export const useLogout = () => {
 export const useGetMe = () => {
   return useQuery({
     queryKey: ["user"],
-    queryFn: getMe
+    queryFn: getMe,
+    retry: false
   })
 };
