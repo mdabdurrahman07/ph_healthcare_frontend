@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "../ui/toast";
 import { GoogleLogin } from "@react-oauth/google";
 import { useGoogleOAuth, useRegistration } from "@/hooks/auth";
+import { Spinner } from "../ui/spinner";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export function RegisterForm() {
     confirmPassword: "@User123456",
   };
 
-  const { mutate: registration } = useRegistration();
+  const { mutate: registration, isPending: registrationPending } = useRegistration();
   const { mutate: googleLogin } = useGoogleOAuth();
 
   const form = useForm({
@@ -297,7 +298,15 @@ export function RegisterForm() {
             }}
           </form.Field>
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit">
+             {registrationPending ? (
+              <>
+                <Spinner /> submitting
+              </>
+            ) : (
+              "Submit"
+            )}
+          </Button>
         </FieldGroup>
       </form>
 
