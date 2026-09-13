@@ -26,7 +26,7 @@ const LoginPage = () => {
       <div className="relative hidden bg-muted lg:block">
         <Image
           src="/login.jpg"
-          alt="PH HealthCare Register Image"
+          alt="PH HealthCare Login Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
           fill
           loading="eager"
