@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const adminLayout = () => {
+const adminLayout = ({children}: {children: ReactNode}) => {
     return (
         <div>
-            adminLayout
+        AdminLayout{children}
         </div>
     );
 };

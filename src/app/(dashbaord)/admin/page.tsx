@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-const approveDoctor = () => {
-  return (
-    <div>
-      <h1>approveDoctor</h1>
-    </div>
-  );
+const AdminDashboardHome = () => {
+    return (
+        <div>
+           This is AdminDashboardHome Page 
+        </div>
+    );
 };
 
-export default approveDoctor;
+export default AdminDashboardHome;

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const globalLayout = () => {
+const globalLayout = ({children}: {children: ReactNode}) => {
     return (
         <div>
-            globalLayout
+         GeneralDashboardLayout  {children}
         </div>
     );
 };
