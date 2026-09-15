@@ -16,11 +16,15 @@ import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { Button } from "../ui/button";
-import { useVerifyAccount } from "@/hooks/auth";
+import { useVerifyAccount, useVerifyDoctorAccount } from "@/hooks/auth";
 
 const RESEND_COOLDOWN = 120;
 
-const VerifyAccountForm = () => {
+const VerifyAccountForm = ({
+  mode = "patient",
+}: {
+  mode: "doctor" | "patient";
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -28,7 +32,10 @@ const VerifyAccountForm = () => {
   const [isInvalid, setIsInvalid] = useState(false);
   const [resendTimer, setResendTimer] = useState(RESEND_COOLDOWN);
 
-  const { mutate: verify, isPending: verifyPending } = useVerifyAccount();
+  const { mutate: verifyPatient } = useVerifyAccount();
+  const { mutate: verifyDoctor } = useVerifyDoctorAccount();
+
+  const verify = mode === "doctor" ? verifyDoctor : verifyPatient;
 
   const email = searchParams.get("email") || "";
 
@@ -36,15 +43,19 @@ const VerifyAccountForm = () => {
     if (!email) {
       router.push("/");
     }
-  }, [email, router]);
+  }, [email, router.push]);
 
   useEffect(() => {
+    if (resendTimer <= 0) {
+      return;
+    }
+
     const timer = setInterval(() => {
-      setResendTimer((prev) => (prev > 0 ? prev - 1 : 0));
+      setResendTimer((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [resendTimer]);
 
   const handleOTP = () => {
     if (otp.length !== 6) {
@@ -67,6 +78,18 @@ const VerifyAccountForm = () => {
           });
         }
 
+        if (mode === "doctor") {
+          toast.add({
+            title: "Verification Successful",
+            description:
+              "An admin will approve your account. This may take time. Please check your email in few days",
+            type: "success",
+          });
+          router.push("/");
+
+          return;
+        }
+
         toast.add({
           title: "Verification Successful",
           description: "Welcome onboard",
@@ -87,6 +110,7 @@ const VerifyAccountForm = () => {
   if (!email) {
     return null;
   }
+
   return (
     <Card>
       <CardHeader>
@@ -140,7 +164,7 @@ const VerifyAccountForm = () => {
       </CardContent>
       <CardFooter>
         <Button disabled={resendTimer > 0}>Resend</Button>
-        <Button disabled={verifyPending} type="submit" form="otp-form">
+        <Button type="submit" form="otp-form">
           Submit
         </Button>
       </CardFooter>
