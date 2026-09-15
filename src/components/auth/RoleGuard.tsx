@@ -1,3 +1,4 @@
+"use client"
 import React, { ReactNode, useEffect } from 'react';
 import AuthLoading from './AuthLoading';
 import { useGetMe } from '@/hooks/auth';

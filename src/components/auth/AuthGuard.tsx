@@ -1,6 +1,6 @@
 "use client";
 import { useGetMe } from "@/hooks/auth";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { ReactNode, useEffect } from "react";
 import AuthLoading from "./AuthLoading";
 

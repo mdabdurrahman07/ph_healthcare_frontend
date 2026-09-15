@@ -2,11 +2,14 @@
 import { ReactNode } from "react";
 import QueryProvider from "./queryProvider";
 import { GoogleAuthProvider } from "./google-auth.provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function Providers({ children }: { children: ReactNode }) {
   return (
     <GoogleAuthProvider>
-      <QueryProvider>{children}</QueryProvider>
+      <QueryProvider>
+        <TooltipProvider>{children}</TooltipProvider>
+      </QueryProvider>
     </GoogleAuthProvider>
   );
 }
