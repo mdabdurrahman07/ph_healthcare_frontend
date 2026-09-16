@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import React from "react";
+import DoctorApprovalTable from "./DoctorApprovalTable";
 
 const DoctorApprovalTabs = () => {
   return (
@@ -12,11 +13,11 @@ const DoctorApprovalTabs = () => {
         <TabsTrigger value="all">All</TabsTrigger>
       </TabsList>
       <TabsContent value="pending">
-       Pending Table
+      <DoctorApprovalTable/>
       </TabsContent>
-      <TabsContent value="approved">Approved Table</TabsContent>
-      <TabsContent value="rejected">Rejected Table</TabsContent>
-      <TabsContent value="all">All Table</TabsContent>
+      <TabsContent value="approved"><DoctorApprovalTable/></TabsContent>
+      <TabsContent value="rejected"><DoctorApprovalTable/></TabsContent>
+      <TabsContent value="all"><DoctorApprovalTable/></TabsContent>
     </Tabs>
   );
 };
