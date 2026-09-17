@@ -4,13 +4,13 @@ import React from "react";
 
 const ApproveDoctorPage = () => {
   return (
-    <div>
+   <section className="p-5">
       <div>
-        <h1>Doctor Approval</h1>
-        <p>Please review and make sure the given data is real</p>
+        <h1> Doctor approval </h1>
+        <p>Please review and make sure the given data is real.</p>
       </div>
       <DoctorApprovalTabs />
-    </div>
+    </section>
   );
 };
 

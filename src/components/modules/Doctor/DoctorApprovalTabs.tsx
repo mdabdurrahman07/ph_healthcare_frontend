@@ -1,23 +1,21 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import React from "react";
+import React, { Suspense } from "react";
 import DoctorApprovalTable from "./DoctorApprovalTable";
+import DoctorApprovalTableLoading from "./DoctorApprovalTableLoading";
 
 const DoctorApprovalTabs = () => {
   return (
-    <Tabs defaultValue="pending" className="w-[400px]">
+    <Tabs defaultValue="pending" className="w-full">
       <TabsList>
         <TabsTrigger value="pending">Pending</TabsTrigger>
         <TabsTrigger value="approved">Approved</TabsTrigger>
         <TabsTrigger value="rejected">Rejected</TabsTrigger>
         <TabsTrigger value="all">All</TabsTrigger>
       </TabsList>
-      <TabsContent value="pending">
-      <DoctorApprovalTable/>
-      </TabsContent>
-      <TabsContent value="approved"><DoctorApprovalTable/></TabsContent>
-      <TabsContent value="rejected"><DoctorApprovalTable/></TabsContent>
-      <TabsContent value="all"><DoctorApprovalTable/></TabsContent>
+      <Suspense fallback={<DoctorApprovalTableLoading />}>
+        <DoctorApprovalTable />
+      </Suspense>
     </Tabs>
   );
 };

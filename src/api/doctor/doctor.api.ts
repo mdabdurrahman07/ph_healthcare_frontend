@@ -20,3 +20,7 @@ export function verifyDoctorAccount(payload: VerifyAccountPayload) {
     body: payload,
   });
 }
+
+export function getAllDoctors(){
+  return apiClient("/doctor/all-doctors")
+}

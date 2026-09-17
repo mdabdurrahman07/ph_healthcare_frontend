@@ -1,34 +1,49 @@
-import React from "react";
+"use client";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import DoctorApprovalSheet from "./DoctorApprovalSheet";
+import { useGetAllDoctors, useSuspenseGetAllDoctors } from "@/hooks/auth";
 
 const DoctorApprovalTable = () => {
+  const { data } = useSuspenseGetAllDoctors();
+  const doctors = data?.data
+
   return (
-    <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">INV001</TableCell>
-          <TableCell className="text-right">$250.00</TableCell>
-          <DoctorApprovalSheet/>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <div className="w-full rounded-lg border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>License No.</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Specialization</TableHead>
+            <TableHead className="text-right">Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {doctors.map((doctor) => (
+            <TableRow key={doctor.id}>
+              <TableCell>{doctor.name}</TableCell>
+              <TableCell>{doctor.licenseNumber}</TableCell>
+              <TableCell>{doctor.email}</TableCell>
+              <TableCell>{doctor.contactNumber}</TableCell>
+              <TableCell>
+                {doctor.specialization ? doctor.specialization : "-"}
+              </TableCell>
+              <TableCell className="text-right">
+                <DoctorApprovalSheet />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 
