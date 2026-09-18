@@ -1,22 +1,63 @@
+"use client";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import React, { Suspense } from "react";
+import { Suspense, useState } from "react";
 import DoctorApprovalTable from "./DoctorApprovalTable";
 import DoctorApprovalTableLoading from "./DoctorApprovalTableLoading";
+import type {
+  DoctorParams,
+  DoctorVerificationStatus,
+} from "@/types/doctor/doctor.type";
+import { Input } from "@/components/ui/input";
+import DoctorApprovalSheet from "./DoctorApprovalSheet";
+
+const verificationStatus: ["ALL" | DoctorVerificationStatus, string][] = [
+  ["APPROVED", "Approved"],
+  ["PENDING", "Pending"],
+  ["REJECTED", "Rejected"],
+  ["ALL", "All"],
+];
 
 const DoctorApprovalTabs = () => {
+  const [tab, setTab] = useState<"ALL" | DoctorVerificationStatus>("ALL");
+  const [selectedId, setSelectedId] = useState("");
+
+  const queryParams: DoctorParams = {
+    page: 1,
+    limit: 10,
+    ...(tab === "ALL" ? {} : { verificationStatus: tab }),
+  };
   return (
-    <Tabs defaultValue="pending" className="w-full">
-      <TabsList>
-        <TabsTrigger value="pending">Pending</TabsTrigger>
-        <TabsTrigger value="approved">Approved</TabsTrigger>
-        <TabsTrigger value="rejected">Rejected</TabsTrigger>
-        <TabsTrigger value="all">All</TabsTrigger>
-      </TabsList>
+    <>
+      <div className="flex justify-between my-5">
+        <div>
+          <Input type="search" placeholder="Search by name or email" />
+        </div>
+        <div>
+          <Tabs
+            value={tab}
+            onValueChange={(value) => setTab(value)}
+            className="w-full"
+          >
+            <TabsList>
+              {verificationStatus.map(([value, label]) => (
+                <TabsTrigger value={value} key={value}>
+                  {label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </div>
+      </div>
       <Suspense fallback={<DoctorApprovalTableLoading />}>
-        <DoctorApprovalTable />
+        <DoctorApprovalTable {...queryParams} handleReview={setSelectedId} />
       </Suspense>
-    </Tabs>
+      <DoctorApprovalSheet
+        selectedId={selectedId}
+        onClose={() => setSelectedId("")}
+        {...queryParams}
+      />
+    </>
   );
 };
 

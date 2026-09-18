@@ -1,29 +1,106 @@
-import React from "react";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { ApproveDoctorPayload, DoctorParams } from "@/types/doctor/doctor.type";
+import { useApproveDoctor, useGetAllDoctors } from "@/hooks/auth";
+import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
 
-const DoctorApprovalSheet = () => {
+interface Props extends DoctorParams {
+  selectedId: string;
+  onClose: () => void;
+}
+
+const DoctorApprovalSheet = ({ selectedId, onClose, ...params }: Props) => {
+  const [confirmRejection, setConfirmRejection] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
+  const { data } = useGetAllDoctors(params);
+  const { mutate: verify, isPending } = useApproveDoctor();
+  const selectedDoctor = data?.data?.find((doctor) => doctor.id === selectedId);
+  const handleClose = () => {
+    setConfirmRejection(false);
+    setRejectionReason("");
+    onClose();
+  };
+  const handleReviewAction = (status: "APPROVED" | "REJECTED") => {
+    const reviewData: ApproveDoctorPayload = {
+      doctorId: selectedId,
+      verificationStatus: status,
+      rejectionReason: rejectionReason,
+    };
+    verify(reviewData, {
+      onSuccess: (res) => {
+        console.log("success", res);
+        handleClose();
+      },
+      onError: (err) => {
+        console.log("Error", err);
+      },
+    });
+  };
+  if (!selectedDoctor) {
+    return null;
+  }
   return (
-    <Sheet>
-      <SheetTrigger>
-        <Button variant="outline">
-            Review
-        </Button>
-      </SheetTrigger>
+    <Sheet open={!!selectedId} onOpenChange={() => onClose()}>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Are you absolutely sure?</SheetTitle>
+          <SheetTitle>Review and take action</SheetTitle>
           <SheetDescription>This action cannot be undone.</SheetDescription>
         </SheetHeader>
+        Doctor Name: {selectedDoctor.name}
+        <SheetFooter>
+          {confirmRejection ? (
+            <div className="flex flex-col gap-3">
+              <Textarea
+                value={rejectionReason}
+                onChange={(e) => setRejectionReason(e.target.value)}
+              />
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  onClick={handleClose}
+                  className="flex-1"
+                >
+                  Confirm Rejection
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => handleReviewAction("REJECTED")}
+                  className="flex-1"
+                  disabled={!rejectionReason}
+                >
+                  Confirm Rejection
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <Button
+                variant="destructive"
+                size="lg"
+                className="flex-1"
+                onClick={() => setConfirmRejection(true)}
+              >
+                Reject
+              </Button>
+              <Button
+                onClick={() => handleReviewAction("APPROVED")}
+                variant="default"
+                size="lg"
+                className="flex-1"
+              >
+                Approve
+              </Button>
+            </div>
+          )}
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   );

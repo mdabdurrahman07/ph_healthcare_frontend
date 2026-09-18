@@ -20,3 +20,29 @@ export interface DoctorApplicationPayload {
   additionalFiles: File[];
   data: DoctorApplicationData;
 }
+
+export type DoctorVerificationStatus = "PENDING" | "APPROVED" | "REJECTED";
+
+export interface Doctor {
+  id: string | number;
+  name: string;
+  email: string;
+  licenseNumber?: string | null;
+  contactNumber?: string | null;
+  specialization?: string | null;
+  verificationStatus?: DoctorVerificationStatus;
+}
+
+export interface DoctorParams {
+  verificationStatus?: DoctorVerificationStatus;
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+  sortOrder?: "desc" | "asc";
+}
+
+export interface ApproveDoctorPayload {
+  doctorId: string;
+  verificationStatus: "APPROVED" | "REJECTED";
+  rejectionReason?: string;
+}

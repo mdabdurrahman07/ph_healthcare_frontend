@@ -7,12 +7,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useSuspenseGetAllDoctors } from "@/hooks/auth";
+import type { Doctor, DoctorParams } from "@/types/doctor/doctor.type";
 import DoctorApprovalSheet from "./DoctorApprovalSheet";
-import { useGetAllDoctors, useSuspenseGetAllDoctors } from "@/hooks/auth";
+import { Button } from "@/components/ui/button";
+import { Dispatch, SetStateAction } from "react";
 
-const DoctorApprovalTable = () => {
-  const { data } = useSuspenseGetAllDoctors();
-  const doctors = data?.data
+interface Props extends DoctorParams {
+  handleReview: Dispatch<SetStateAction<string>>
+}
+
+const DoctorApprovalTable = ({handleReview, ...params }: Props) => {
+  const { data } = useSuspenseGetAllDoctors(params);
+  const doctors: Doctor[] = Array.isArray(
+    (data as { data?: Doctor[] } | undefined)?.data,
+  )
+    ? ((data as { data?: Doctor[] }).data ?? [])
+    : [];
 
   return (
     <div className="w-full rounded-lg border">
@@ -30,14 +41,14 @@ const DoctorApprovalTable = () => {
           {doctors.map((doctor) => (
             <TableRow key={doctor.id}>
               <TableCell>{doctor.name}</TableCell>
-              <TableCell>{doctor.licenseNumber}</TableCell>
+              <TableCell>{doctor.licenseNumber ?? "-"}</TableCell>
               <TableCell>{doctor.email}</TableCell>
-              <TableCell>{doctor.contactNumber}</TableCell>
+              <TableCell>{doctor.contactNumber ?? "-"}</TableCell>
               <TableCell>
                 {doctor.specialization ? doctor.specialization : "-"}
               </TableCell>
               <TableCell className="text-right">
-                <DoctorApprovalSheet />
+                <Button variant="outline" onClick={() => handleReview(doctor.id)}>Review</Button>
               </TableCell>
             </TableRow>
           ))}
