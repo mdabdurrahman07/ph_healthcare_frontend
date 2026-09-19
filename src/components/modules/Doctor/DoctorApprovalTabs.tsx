@@ -11,6 +11,7 @@ import type {
 import { Input } from "@/components/ui/input";
 import DoctorApprovalSheet from "./DoctorApprovalSheet";
 import { UseDebounce } from "@/hooks/debounce/debounce.hook";
+import TablePagination from "@/components/ui/table-pagination";
 
 const verificationStatus: ["ALL" | DoctorVerificationStatus, string][] = [
   ["APPROVED", "Approved"],
@@ -60,6 +61,7 @@ const DoctorApprovalTabs = () => {
       <Suspense fallback={<DoctorApprovalTableLoading />}>
         <DoctorApprovalTable {...queryParams} handleReview={setSelectedId} />
       </Suspense>
+      <TablePagination/>
       <DoctorApprovalSheet
         selectedId={selectedId}
         onClose={() => setSelectedId("")}
