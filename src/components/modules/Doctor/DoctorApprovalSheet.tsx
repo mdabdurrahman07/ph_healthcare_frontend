@@ -7,7 +7,11 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { ApproveDoctorPayload, DoctorParams } from "@/types/doctor/doctor.type";
+import {
+  ApproveDoctorPayload,
+  Doctor,
+  DoctorParams,
+} from "@/types/doctor/doctor.type";
 import { useApproveDoctor, useGetAllDoctors } from "@/hooks/auth";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,7 +26,9 @@ const DoctorApprovalSheet = ({ selectedId, onClose, ...params }: Props) => {
   const [rejectionReason, setRejectionReason] = useState("");
   const { data } = useGetAllDoctors(params);
   const { mutate: verify, isPending } = useApproveDoctor();
-  const selectedDoctor = data?.data?.find((doctor) => doctor.id === selectedId);
+  const selectedDoctor = data?.data?.find(
+    (doctor: Doctor) => doctor.id === selectedId,
+  );
   const handleClose = () => {
     setConfirmRejection(false);
     setRejectionReason("");
@@ -68,7 +74,7 @@ const DoctorApprovalSheet = ({ selectedId, onClose, ...params }: Props) => {
                   onClick={handleClose}
                   className="flex-1"
                 >
-                  Confirm Rejection
+                  Cancel
                 </Button>
                 <Button
                   variant="destructive"
