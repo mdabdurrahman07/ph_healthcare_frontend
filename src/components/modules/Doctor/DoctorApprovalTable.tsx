@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/table";
 import { useSuspenseGetAllDoctors } from "@/hooks/auth";
 import type { Doctor, DoctorParams } from "@/types/doctor/doctor.type";
-import DoctorApprovalSheet from "./DoctorApprovalSheet";
 import { Button } from "@/components/ui/button";
 import { Dispatch, SetStateAction } from "react";
 
@@ -48,7 +47,12 @@ const DoctorApprovalTable = ({handleReview, ...params }: Props) => {
                 {doctor.specialization ? doctor.specialization : "-"}
               </TableCell>
               <TableCell className="text-right">
-                <Button variant="outline" onClick={() => handleReview(doctor.id)}>Review</Button>
+               {
+                doctor.user.emailVerified ? 
+                 <Button disabled={doctor.verificationStatus !== "PENDING"}  variant="outline" onClick={() => handleReview(doctor.id)}>Review</Button>
+                 : 
+                  <Button disabled>Not Verified</Button>
+               }
               </TableCell>
             </TableRow>
           ))}

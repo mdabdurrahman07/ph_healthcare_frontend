@@ -44,7 +44,7 @@ const DoctorApplyForm = () => {
       specialization: "",
       licenseNumber: "",
       qualifications: "",
-      experienceYears: "",
+      qualificationYears: "",
       consultationFee: "",
       bio: "",
       resume: null as File | null,
@@ -65,7 +65,7 @@ const DoctorApplyForm = () => {
           specialization: value.specialization.trim(),
           licenseNumber: value.licenseNumber.trim(),
           qualifications: value.qualifications.trim(),
-          experienceYears: Number(value.experienceYears),
+          qualificationYears: Number(value.qualificationYears),
           contactNumber: value.phone.trim(),
           address: value.address.trim(),
           consultationFee: value.consultationFee.trim()
@@ -74,6 +74,12 @@ const DoctorApplyForm = () => {
           bio: value.bio.trim(),
         },
       };
+
+      console.log({
+        data: doctorData,
+          resume: value.resume as File,
+          additionalFiles: value.additionalFiles
+      })
 
       apply(
         {
@@ -349,7 +355,7 @@ const DoctorApplyForm = () => {
               }}
             </form.Field>
 
-            <form.Field name="experienceYears">
+            <form.Field name="qualificationYears">
               {(field) => {
                 const isInvalid =
                   field.state.meta.isTouched && !field.state.meta.isValid;

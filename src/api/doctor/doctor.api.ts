@@ -19,7 +19,7 @@ export function applyAsDoctor(payload: DoctorApplicationPayload) {
   });
 }
 export function verifyDoctorAccount(payload: VerifyAccountPayload) {
-  return apiClient("/doctor/apply-as-doctor/verify-email", {
+  return apiClient("/doctor/apply_as_doctor/verifyEmail", {
     method: "POST",
     body: payload,
   });

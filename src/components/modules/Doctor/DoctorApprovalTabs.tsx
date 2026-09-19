@@ -10,6 +10,7 @@ import type {
 } from "@/types/doctor/doctor.type";
 import { Input } from "@/components/ui/input";
 import DoctorApprovalSheet from "./DoctorApprovalSheet";
+import { UseDebounce } from "@/hooks/debounce/debounce.hook";
 
 const verificationStatus: ["ALL" | DoctorVerificationStatus, string][] = [
   ["APPROVED", "Approved"],
@@ -21,17 +22,24 @@ const verificationStatus: ["ALL" | DoctorVerificationStatus, string][] = [
 const DoctorApprovalTabs = () => {
   const [tab, setTab] = useState<"ALL" | DoctorVerificationStatus>("ALL");
   const [selectedId, setSelectedId] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const debouncedSearch = UseDebounce(searchInput);
 
   const queryParams: DoctorParams = {
     page: 1,
     limit: 10,
     ...(tab === "ALL" ? {} : { verificationStatus: tab }),
+    ...(debouncedSearch ? { searchTerm: debouncedSearch } : {}),
   };
   return (
     <>
       <div className="flex justify-between my-5">
         <div>
-          <Input type="search" placeholder="Search by name or email" />
+          <Input
+            onChange={(e) => setSearchInput(e.target.value)}
+            type="search"
+            placeholder="Search by name or email"
+          />
         </div>
         <div>
           <Tabs
