@@ -1,4 +1,3 @@
-import DoctorApprovalTable from "@/components/modules/Doctor/DoctorApprovalTable";
 import DoctorApprovalTabs from "@/components/modules/Doctor/DoctorApprovalTabs";
 import React from "react";
 

@@ -10,7 +10,7 @@ import type {
 } from "@/types/doctor/doctor.type";
 import { Input } from "@/components/ui/input";
 import DoctorApprovalSheet from "./DoctorApprovalSheet";
-import { UseDebounce } from "@/hooks/debounce/debounce.hook";
+import { useDebounce } from "@/hooks/debounce/debounce.hook";
 
 const verificationStatus: ["ALL" | DoctorVerificationStatus, string][] = [
   ["APPROVED", "Approved"],
@@ -24,7 +24,7 @@ const DoctorApprovalTabs = () => {
   const [selectedId, setSelectedId] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [page, setPage] = useState(1)
-  const debouncedSearch = UseDebounce(searchInput);
+  const debouncedSearch = useDebounce(searchInput);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
     setSearchInput(e.target.value)
@@ -65,7 +65,11 @@ const DoctorApprovalTabs = () => {
         </div>
       </div>
       <Suspense fallback={<DoctorApprovalTableLoading />}>
-        <DoctorApprovalTable {...queryParams} handleReview={setSelectedId} handlePageChange={() => setPage}/>
+        <DoctorApprovalTable
+          {...queryParams}
+          handleReview={setSelectedId}
+          handlePageChange={setPage}
+        />
       </Suspense>
 
       <DoctorApprovalSheet
