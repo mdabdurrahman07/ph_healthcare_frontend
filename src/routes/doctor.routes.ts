@@ -9,7 +9,7 @@ export const doctorRoutes = [
         },
         {
           title: "Create Schedule",
-          url: `${prefix}`,
+          url: `${prefix}/schedules`,
         },
       ],
     },

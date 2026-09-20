@@ -122,8 +122,8 @@ const DoctorApprovalSheet = ({ selectedId, onClose, ...params }: Props) => {
             {detailRow("Qualifications", selectedDoctor.qualifications)}
             {detailRow(
               "Experience",
-              selectedDoctor.qualificationYears != null
-                ? `${selectedDoctor.qualificationYears} yrs`
+              selectedDoctor.experienceYears != null
+                ? `${selectedDoctor.experienceYears} yrs`
                 : null,
             )}
             {detailRow(

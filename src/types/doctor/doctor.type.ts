@@ -9,7 +9,7 @@ export interface DoctorApplicationData {
     specialization: string;
     licenseNumber: string;
     qualifications: string;
-    qualificationYears: number;
+    experienceYears: number;
     contactNumber: string;
     address: string;
     consultationFee: number | undefined;
@@ -33,7 +33,7 @@ export interface Doctor {
   specialization: string;
   licenseNumber: string;
   qualifications: string;
-  qualificationYears: number;
+  experienceYears: number;
   bio?: string | null;
   consultationFee?: number | string | null;
   contactNumber?: string | null;

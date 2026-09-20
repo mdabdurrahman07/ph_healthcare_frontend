@@ -41,7 +41,7 @@ export const doctorApplicationSchema = z.object({
   specialization: z.string().trim().min(2, "Specialization is required"),
   licenseNumber: z.string().trim().min(3, "License number is required"),
   qualifications: z.string().trim().min(2, "Qualifications are required"),
-  qualificationYears: z
+  experienceYears: z
     .string()
     .trim()
     .refine((value) => /^\d+$/.test(value), {

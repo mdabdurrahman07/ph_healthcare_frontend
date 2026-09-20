@@ -15,13 +15,13 @@ export function applyAsDoctor(payload: DoctorApplicationPayload) {
   for (const file of payload.additionalFiles) {
     formData.append("additionalFiles", file);
   }
-  return apiClient("/doctor/apply_as_doctor", {
+  return apiClient("/doctor/apply-as-doctor", {
     method: "POST",
     body: formData,
   });
 }
 export function verifyDoctorAccount(payload: VerifyAccountPayload) {
-  return apiClient("/doctor/apply_as_doctor/verifyEmail", {
+  return apiClient("/doctor/apply-as-doctor/verify-email", {
     method: "POST",
     body: payload,
   });
