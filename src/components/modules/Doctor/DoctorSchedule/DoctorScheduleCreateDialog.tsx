@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import {
   Dialog,
@@ -9,9 +9,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import CreateScheduleForm from "@/components/form/CreateScheduleForm";
 
 const DoctorScheduleCreateDialog = () => {
-    const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={<Button size="lg" />}>
@@ -24,7 +25,7 @@ const DoctorScheduleCreateDialog = () => {
             This schedule will be visible to patient
           </DialogDescription>
         </DialogHeader>
-        {/* <CreateScheduleForm /> */}
+        <CreateScheduleForm />
       </DialogContent>
     </Dialog>
   );
