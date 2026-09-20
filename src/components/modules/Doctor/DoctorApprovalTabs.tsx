@@ -1,7 +1,7 @@
 "use client";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { Suspense, useState } from "react";
+import { ChangeEvent, Suspense, useState } from "react";
 import DoctorApprovalTable from "./DoctorApprovalTable";
 import DoctorApprovalTableLoading from "./DoctorApprovalTableLoading";
 import type {
@@ -11,7 +11,6 @@ import type {
 import { Input } from "@/components/ui/input";
 import DoctorApprovalSheet from "./DoctorApprovalSheet";
 import { UseDebounce } from "@/hooks/debounce/debounce.hook";
-import TablePagination from "@/components/ui/table-pagination";
 
 const verificationStatus: ["ALL" | DoctorVerificationStatus, string][] = [
   ["APPROVED", "Approved"],
@@ -24,10 +23,17 @@ const DoctorApprovalTabs = () => {
   const [tab, setTab] = useState<"ALL" | DoctorVerificationStatus>("ALL");
   const [selectedId, setSelectedId] = useState("");
   const [searchInput, setSearchInput] = useState("");
+  const [page, setPage] = useState(1)
   const debouncedSearch = UseDebounce(searchInput);
 
+  const handleSearch = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
+    setSearchInput(e.target.value)
+    setPage(1)
+
+  }
+
   const queryParams: DoctorParams = {
-    page: 1,
+    page,
     limit: 10,
     ...(tab === "ALL" ? {} : { verificationStatus: tab }),
     ...(debouncedSearch ? { searchTerm: debouncedSearch } : {}),
@@ -37,7 +43,7 @@ const DoctorApprovalTabs = () => {
       <div className="flex justify-between my-5">
         <div>
           <Input
-            onChange={(e) => setSearchInput(e.target.value)}
+            onChange={(e) => handleSearch(e)}
             type="search"
             placeholder="Search by name or email"
           />
@@ -59,9 +65,9 @@ const DoctorApprovalTabs = () => {
         </div>
       </div>
       <Suspense fallback={<DoctorApprovalTableLoading />}>
-        <DoctorApprovalTable {...queryParams} handleReview={setSelectedId} />
+        <DoctorApprovalTable {...queryParams} handleReview={setSelectedId} handlePageChange={() => setPage}/>
       </Suspense>
-      <TablePagination/>
+
       <DoctorApprovalSheet
         selectedId={selectedId}
         onClose={() => setSelectedId("")}

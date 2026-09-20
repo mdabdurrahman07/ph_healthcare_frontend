@@ -1,7 +1,9 @@
 import apiClient from "@/lib/apiClient";
+import { ApiResponse } from "@/types/api/api.types";
 import type { VerifyAccountPayload } from "@/types/auth/auth.type";
 import type {
   ApproveDoctorPayload,
+  Doctor,
   DoctorApplicationPayload,
   DoctorParams,
 } from "@/types/doctor/doctor.type";
@@ -26,7 +28,7 @@ export function verifyDoctorAccount(payload: VerifyAccountPayload) {
 }
 
 export function getAllDoctors(params: DoctorParams) {
-  return apiClient("/doctor/all-doctors", {
+  return apiClient<ApiResponse<Doctor[]>>("/doctor/all-doctors", {
     params,
   });
 }
