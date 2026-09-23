@@ -11,6 +11,7 @@ import React from "react";
 const routes = [
   { name: "Home", url: "/" },
   { name: "About Us", url: "/about-us" },
+  { name: "Doctors", url: "/doctors" },
   // {name: "Home", url: "/"},
   // {name: "Home", url: "/"},
 ];
