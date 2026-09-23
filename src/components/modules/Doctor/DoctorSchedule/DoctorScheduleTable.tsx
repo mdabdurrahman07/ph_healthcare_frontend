@@ -9,8 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ScheduleParams } from "@/types/doctor/schedule/schedule.types";
-
-
+import { ScheduleActions } from "./DoctorScheduleAction";
+import { useSuspenseMySchedules } from "@/hooks/auth/schedule.hook";
 
 interface Props extends ScheduleParams {}
 
@@ -22,7 +22,9 @@ function formatDateTime(value: string) {
 }
 
 const DoctorScheduleTable = (params: Props) => {
-  const schedules: any[] = [];
+  const { data } = useSuspenseMySchedules(params);
+
+  const schedules = data?.data || [];
 
   if (schedules.length === 0) {
     return (
@@ -70,7 +72,7 @@ const DoctorScheduleTable = (params: Props) => {
                 </span>
               </TableCell>
               <TableCell className="text-right">
-                <Button>View</Button>
+                <ScheduleActions schedule={schedule} />
               </TableCell>
             </TableRow>
           ))}

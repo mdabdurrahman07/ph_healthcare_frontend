@@ -9,6 +9,7 @@ import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
 import { scheduleSchema } from "@/validations/schedule.validation";
 import { useCreateSchedule } from "@/hooks/auth/schedule.hook";
+import { Spinner } from "../ui/spinner";
 
 const CreateScheduleForm = ({ handleClose }: { handleClose: () => void }) => {
   const { mutate: create, isPending } = useCreateSchedule();
@@ -68,7 +69,6 @@ const CreateScheduleForm = ({ handleClose }: { handleClose: () => void }) => {
       }}
     >
       <FieldGroup>
-        {/* calender */}
         <form.Field name="date">
           {(field) => {
             const isInvalid =
@@ -76,8 +76,6 @@ const CreateScheduleForm = ({ handleClose }: { handleClose: () => void }) => {
             const selected = field.state.value
               ? new Date(`${field.state.value}T00:00:00`)
               : undefined;
-
-            console.log({ selected });
 
             return (
               <Field data-invalid={isInvalid}>
@@ -105,7 +103,7 @@ const CreateScheduleForm = ({ handleClose }: { handleClose: () => void }) => {
             );
           }}
         </form.Field>
-        {/* calender */}
+
         <div className="grid grid-cols-2 gap-3">
           <form.Field name="startTime">
             {(field) => {
@@ -175,8 +173,14 @@ const CreateScheduleForm = ({ handleClose }: { handleClose: () => void }) => {
           }}
         </form.Field>
 
-        <Button disabled={isPending} type="submit">
-          "Submit"
+        <Button type="submit" disabled={isPending}>
+          {isPending ? (
+            <>
+              <Spinner /> Submitting
+            </>
+          ) : (
+            "Submit"
+          )}
         </Button>
       </FieldGroup>
     </form>
