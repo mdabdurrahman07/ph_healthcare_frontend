@@ -8,8 +8,10 @@ import { toast } from "../ui/toast";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
 import { scheduleSchema } from "@/validations/schedule.validation";
+import { useCreateSchedule } from "@/hooks/auth/schedule.hook";
 
-const CreateScheduleForm = () => {
+const CreateScheduleForm = ({ handleClose }: { handleClose: () => void }) => {
+  const { mutate: create, isPending } = useCreateSchedule();
   const form = useForm({
     defaultValues: {
       date: "",
@@ -29,6 +31,33 @@ const CreateScheduleForm = () => {
         meetingLink: value.meetingLink,
       };
       console.log(scheduleValue);
+      create(scheduleValue, {
+        onSuccess: (res) => {
+          if (!res.success) {
+            toast.add({
+              title: "Server Failure",
+              description: "Something went wrong. Please try again",
+              type: "error",
+            });
+            return;
+          }
+          toast.add({
+            title: "Schedule Created",
+            description: "Your schedule is saved as a draft",
+            type: "success",
+          });
+          handleClose();
+        },
+        onError: (err) => {
+          toast.add({
+            title: "Schedule creation failed",
+            description:
+              err.message || "Something went wrong. Please try again",
+            type: "error",
+          });
+          handleClose();
+        },
+      });
     },
   });
   return (
@@ -55,12 +84,13 @@ const CreateScheduleForm = () => {
                 <FieldLabel htmlFor={field.name}>Date</FieldLabel>
                 <Popover>
                   <PopoverTrigger render={<Button variant="outline" />}>
-                    Select Date
+                    {selected ? `${format(selected, "PPP")}` : "Select Date"}
                   </PopoverTrigger>
-                  <PopoverContent>
+                  <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
                       selected={selected}
+                      disabled={{ before: new Date() }}
                       onSelect={(date) => {
                         if (date) {
                           field.handleChange(format(date, "yyyy-MM-dd"));
@@ -145,7 +175,9 @@ const CreateScheduleForm = () => {
           }}
         </form.Field>
 
-        <Button type="submit">"Submit"</Button>
+        <Button disabled={isPending} type="submit">
+          "Submit"
+        </Button>
       </FieldGroup>
     </form>
   );
