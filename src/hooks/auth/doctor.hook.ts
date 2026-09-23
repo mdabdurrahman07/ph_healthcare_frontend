@@ -2,9 +2,15 @@ import {
   applyAsDoctor,
   approveDoctor,
   getAllDoctors,
+  getAllPublicDoctors,
+  getPublicDoctorProfile,
+  getTodayScheduleByDoctor,
   verifyDoctorAccount,
 } from "@/api/doctor/doctor.api";
-import type { DoctorParams } from "@/types/doctor/doctor.type";
+import type {
+  DoctorParams,
+  PublicDoctorParams,
+} from "@/types/doctor/doctor.type";
 import {
   useMutation,
   useQuery,
@@ -47,5 +53,38 @@ export function useApproveDoctor() {
         queryKey: ["doctors"],
       });
     },
+  });
+}
+
+export function useGetAllPublicDoctors(params: PublicDoctorParams) {
+  return useQuery({
+    queryKey: ["doctor", "public", params],
+    queryFn: () => getAllPublicDoctors(params),
+  });
+}
+
+export function useSuspenseGetPublicDoctors(params: PublicDoctorParams) {
+  return useSuspenseQuery({
+    queryKey: ["doctors", "public", params],
+    queryFn: () => getAllPublicDoctors(params),
+  });
+}
+
+export function usePublicDoctorProfile(doctorId: string) {
+  return useQuery({
+    queryKey: ["doctor", "public", doctorId],
+    queryFn: () => getPublicDoctorProfile(doctorId),
+    enabled: !!doctorId,
+  });
+}
+
+export function useGetTodayScheduleByDoctor(params: {
+  doctorId?: string;
+  page?: number;
+  limit?: number;
+}) {
+  return useQuery({
+    queryKey: ["schedule", params],
+    queryFn: () => getTodayScheduleByDoctor(params),
   });
 }
